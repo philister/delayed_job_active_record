@@ -52,9 +52,18 @@ module Delayed
             qu = (['queue like ?'] * Worker.queues.size).join(' OR ')
             ready_scope = ready_scope.where([qu] + Worker.queues)
           end
-          
+
+          if Worker.respond_to?(:exclude_queues) && Worker.exclude_queues.any?
+            qu = (['queue not like ?'] * Worker.exclude_queues.size).join(' AND ')
+            ready_scope = ready_scope.where([qu] + Worker.exclude_queues)
+          end
+
+          if Worker.respond_to?(:eval_queues) && Worker.eval_queues.present?
+            ready_scope = ready_scope.where(eval(Worker.eval_queues))
+          end
+
           ready_scope = ready_scope.by_priority
-          
+
           if true # TODO config use balanced system
             # find priority which is probably used
             firstguy = ready_scope.limit(1).first
