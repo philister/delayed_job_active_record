@@ -54,7 +54,7 @@ module Delayed
           end
 
           if Worker.respond_to?(:exclude_queues) && Worker.exclude_queues.any?
-            qu = (['queue not like ?'] * Worker.exclude_queues.size).join(' AND ')
+            qu = 'queue IS NULL OR (' + (['queue not like ?'] * Worker.exclude_queues.size).join(' AND ') + ')'
             ready_scope = ready_scope.where([qu] + Worker.exclude_queues)
           end
 
@@ -78,7 +78,6 @@ module Delayed
             ready_scope = ready_scope.where(:balance_id=>nextguy)
 
           end
-
 
           reserve_with_scope(ready_scope, worker, db_time_now)
         end
