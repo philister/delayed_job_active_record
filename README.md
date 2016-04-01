@@ -1,3 +1,8 @@
+**If you're viewing this at https://github.com/collectiveidea/delayed_job_active_record,
+you're reading the documentation for the master branch.
+[View documentation for the latest release
+(4.1.0).](https://github.com/collectiveidea/delayed_job_active_record/tree/v4.1.0)**
+
 # DelayedJob ActiveRecord Backend
 
 [![Gem Version](https://badge.fury.io/rb/delayed_job_active_record.png)](https://rubygems.org/gems/delayed_job_active_record)
@@ -19,6 +24,12 @@ delayed_job table.
 
     rails g delayed_job:active_record
     rake db:migrate
+
+## Problems locking jobs
+
+You can try using the legacy locking code. It is usually slower but works better for certain people.
+
+    Delayed::Backend::ActiveRecord.configuration.reserve_sql_strategy = :default_sql
 
 ## Upgrading from 2.x to 3.0.0
 
