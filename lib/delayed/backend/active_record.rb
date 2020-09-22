@@ -102,7 +102,7 @@ module Delayed
             priority = firstguy.priority
 
             # find distinct people in the pool
-            people_in_the_pool = ready_scope.where(:priority => priority).uniq.pluck(:balance_id)
+            people_in_the_pool = ready_scope.where(:priority => priority).distinct.pluck(:balance_id)
             # select next candidate by random
             nextguy = people_in_the_pool.sample
             # select the job for this guy
